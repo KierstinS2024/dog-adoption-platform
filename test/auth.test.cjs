@@ -5,24 +5,23 @@ const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
 const app = require("../app");
 
-// Use chai-http plugin so we can make HTTP requests against our Express app
+// Load chai-http plugin once
 chai.use(chaiHttp);
 const { expect } = chai;
 
 describe("Auth API", () => {
-  // Connect to the database before running tests
+  // Connect to database before running tests
   before(async () => {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.DB_NAME,
     });
   });
 
-  // Disconnect from the database when all tests finish
   after(async () => {
     await mongoose.disconnect();
   });
 
-  // Test user registration endpoint
+  // Test registration
   describe("POST /api/auth/register", () => {
     it("should register a new user", (done) => {
       chai
@@ -36,7 +35,7 @@ describe("Auth API", () => {
     });
   });
 
-  // Test login endpoint
+  // Test login
   describe("POST /api/auth/login", () => {
     it("should login the user and return a JWT token", (done) => {
       chai
