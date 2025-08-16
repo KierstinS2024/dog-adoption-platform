@@ -8,7 +8,11 @@ const {
   registerDog,
   adoptDog,
   deleteDog,
+  getRegisteredDogs,
 } = require("../controllers/dogController");
+
+router.get("/", authMiddleware, getRegisteredDogs);
+
 
 // POST /api/dogs – Register a new dog (authenticated users only)
 router.post("/", authMiddleware, registerDog);
