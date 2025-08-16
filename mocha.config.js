@@ -1,6 +1,6 @@
-// mocha.config.js
 export default {
-  require: ["test/setup.js"],
-  extension: ["cjs"],
-  spec: "test/**/*.cjs",
+  require: [], // no pre-require
+  extension: ["cjs", "js"],
+  spec: "test/**/*.js",
+  loader: "cjs", // <— this tells mocha to use CommonJS loader
 };
