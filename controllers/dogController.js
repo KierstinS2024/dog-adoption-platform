@@ -1,3 +1,4 @@
+// controllers/dogController.js
 // @desc    Delete a dog from the platform
 // @route   DELETE /api/dogs/:id
 // @access  Private (owner-only, and only if dog not adopted)

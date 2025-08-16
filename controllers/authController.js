@@ -10,25 +10,41 @@ exports.registerUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Check if user exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+    // Simple field check
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Username and password are required",
+        });
     }
 
-    // Hash password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const normalizedUsername = username.trim().toLowerCase();
 
-    // Create user
-    const user = await User.create({ username, password: hashedPassword });
+    // Check if username taken (case-insensitive)
+    const existingUser = await User.findOne({ username: normalizedUsername });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Username already exists" });
+    }
 
-    res
-      .status(201)
-      .json({ message: "User registered successfully", userId: user._id });
+    // Hash password and create user
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      username: normalizedUsername,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      data: { userId: user._id },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -38,14 +54,29 @@ exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Username and password are required",
+        });
+    }
+
+    const normalizedUsername = username.trim().toLowerCase();
+
+    const user = await User.findOne({ username: normalizedUsername });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
     }
 
     // Create JWT token
@@ -53,9 +84,13 @@ exports.loginUser = async (req, res) => {
       expiresIn: "24h",
     });
 
-    res.json({ token });
+    res.json({
+      success: true,
+      message: "Login successful",
+      data: { token },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
