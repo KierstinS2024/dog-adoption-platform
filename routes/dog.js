@@ -7,5 +7,9 @@ const { registerDog } = require("../controllers/dogController");
 
 // POST /api/dogs → Register a new dog (must be logged in)
 router.post("/", authMiddleware, registerDog);
+const { registerDog, adoptDog } = require("../controllers/dogController");
+
+// POST /api/dogs/:id/adopt → Adopt a dog
+router.post("/:id/adopt", authMiddleware, adoptDog);
 
 module.exports = router;
