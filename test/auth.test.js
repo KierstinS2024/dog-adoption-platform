@@ -23,7 +23,7 @@ describe("Auth API", () => {
     chai
       .request(app)
       .post("/api/auth/register")
-      .send({ username, password: "abc123" }) // <— use the fresh username
+      .send({ username, password: "abc123" })
       .end((err, res) => {
         expect(res).to.have.status(201);
         done();
