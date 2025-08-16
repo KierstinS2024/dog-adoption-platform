@@ -6,6 +6,7 @@ const app = require("../app");
 
 const { expect } = chai;
 chai.use(chaiHttp);
+const username = "mochatest_" + Date.now();
 
 describe("Auth API", () => {
   before(async () => {
@@ -22,7 +23,7 @@ describe("Auth API", () => {
     chai
       .request(app)
       .post("/api/auth/register")
-      .send({ username: "mochatest", password: "abc123" })
+      .send({ username, password: "abc123" }) // <— use the fresh username
       .end((err, res) => {
         expect(res).to.have.status(201);
         done();
