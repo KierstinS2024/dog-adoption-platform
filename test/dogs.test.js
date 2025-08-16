@@ -56,14 +56,16 @@ describe("Dog Routes", () => {
       });
   });
 
-  it("should adopt a dog", (done) => {
-    chai.request(app)
-      .post(`/api/dogs/${dogId}/adopt`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ thankYouMessage: "Thanks!" })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done();
-      });
-  });
+it("should not allow owner to adopt their own dog", (done) => {
+  chai
+    .request(app)
+    .post(`/api/dogs/${dogId}/adopt`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ thankYouMessage: "Thanks!" })
+    .end((err, res) => {
+      expect(res).to.have.status(403); // your rule
+      done();
+    });
+});
+
 });
