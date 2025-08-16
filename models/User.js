@@ -1,8 +1,7 @@
-// models/User.js
+// models/User.js – User schema (username & hashed password)
 
 const mongoose = require("mongoose");
 
-// Define the structure of a User document
 const UserSchema = new mongoose.Schema(
   {
     username: {
@@ -16,9 +15,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
   },
-  {
-    timestamps: true, // automatically adds createdAt and updatedAt fields
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", UserSchema);

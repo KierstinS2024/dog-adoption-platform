@@ -1,4 +1,4 @@
-// models/Dog.js
+// models/Dog.js – Dog schema (owner, adoption status, description)
 
 const mongoose = require("mongoose");
 
@@ -12,6 +12,7 @@ const DogSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+      trim: true,
     },
     status: {
       type: String,
@@ -31,11 +32,10 @@ const DogSchema = new mongoose.Schema(
     thankYouMessage: {
       type: String,
       default: "",
+      maxlength: 300,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Dog", DogSchema);

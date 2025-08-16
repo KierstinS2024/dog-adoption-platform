@@ -1,5 +1,4 @@
-// routes/dog.js
-// Handles dog-related endpoints under /api/dogs (register, adopt, delete, list)
+// routes/dog.js – Endpoints under /api/dogs (register, adopt, delete, list)
 
 const express = require("express");
 const router = express.Router();
@@ -12,19 +11,19 @@ const {
   getAdoptedDogs,
 } = require("../controllers/dogController");
 
-// GET /api/dogs – List dogs registered by the current user (with filters/pagination)
+// @route GET /api/dogs – List dogs registered by the user
 router.get("/", authMiddleware, getRegisteredDogs);
 
-// POST /api/dogs – Register a new dog (authenticated users only)
+// @route POST /api/dogs – Register a new dog
 router.post("/", authMiddleware, registerDog);
 
-// POST /api/dogs/:id/adopt – Adopt a dog
+// @route POST /api/dogs/:id/adopt – Adopt a dog
 router.post("/:id/adopt", authMiddleware, adoptDog);
 
-// DELETE /api/dogs/:id – Delete a dog (only by owner, if not adopted)
+// @route DELETE /api/dogs/:id – Delete a dog
 router.delete("/:id", authMiddleware, deleteDog);
 
-// GET /api/dogs/adopted – List dogs the user has adopted
+// @route GET /api/dogs/adopted – List adopted dogs
 router.get("/adopted", authMiddleware, getAdoptedDogs);
 
 module.exports = router;
