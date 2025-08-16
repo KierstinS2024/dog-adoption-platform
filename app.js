@@ -19,8 +19,9 @@ app.get("/", (req, res) => {
   res.send("Dog Adoption API is running 🐶");
 });
 
-// TODO: mount your routes here
+// routes here
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/dogs", require("./routes/dog"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
