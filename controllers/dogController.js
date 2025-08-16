@@ -31,6 +31,7 @@ exports.getRegisteredDogs = async (req, res) => {
  * @route   DELETE /api/dogs/:id
  * @access  Private
  */
+
 exports.deleteDog = async (req, res) => {
   try {
     const dogId = req.params.id;
@@ -57,6 +58,27 @@ exports.deleteDog = async (req, res) => {
 
     await dog.deleteOne();
     res.json({ message: "Dog successfully removed from platform" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+/**
+ * @desc    Get dogs adopted by the logged-in user
+ * @route   GET /api/dogs/adopted
+ * @access  Private
+ */
+exports.getAdoptedDogs = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { page = 1, limit = 10 } = req.query;
+
+    const dogs = await Dog.find({ adoptedBy: userId })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    res.json({ success: true, data: dogs });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
